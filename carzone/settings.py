@@ -12,6 +12,11 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 
+import environ
+env = environ.Env()
+environ.Env.read_env()
+
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -20,17 +25,41 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '5-hng!8v*etu^8&l9ruzum#303_x(^mapbp0(2=n#^ulsowo#('
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
-
+LOGIN_REDIRECT_URL = 'dashboard'
 # Application definition
 
+# INSTALLED_APPS = [
+#     'cars.apps.CarsConfig',
+#     'pages.apps.PagesConfig',
+#     'accounts.apps.AccountsConfig',
+#     'django.contrib.admin',
+#     'django.contrib.auth',
+#     'django.contrib.contenttypes',
+#     'django.contrib.sessions',
+#     'django.contrib.messages',
+#     'django.contrib.staticfiles',
+#     'ckeditor',
+#     'multiselectfield',
+#     'django.contrib.humanize',
+#     'django.contrib.sites',
+#     'allauth',
+#     'allauth.account',
+#     'allauth.socialaccount',
+
+#     # Providers
+#     'allauth.socialaccount.providers.facebook',
+#     'allauth.socialaccount.providers.google',
+
+# ]
 INSTALLED_APPS = [
+    'contacts.apps.ContactsConfig',
     'cars.apps.CarsConfig',
     'pages.apps.PagesConfig',
     'django.contrib.admin',
@@ -42,6 +71,15 @@ INSTALLED_APPS = [
     'ckeditor',
     'multiselectfield',
     'django.contrib.humanize',
+    'accounts.apps.AccountsConfig',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+
+    # Providers
+    'allauth.socialaccount.providers.facebook',
+    'allauth.socialaccount.providers.google',
 ]
 
 MIDDLEWARE = [
@@ -78,16 +116,31 @@ WSGI_APPLICATION = 'carzone.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'carzone_db_1',
-        'USER': 'postgres',
-        'PASSWORD': 'Toom007a',
-        'HOST': 'localhost',
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'carzone_db_1',
+#         'USER': 'postgres',
+#         'PASSWORD': 'Toom007a',
+#         'HOST': 'localhost',
+#     }
+# }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'carzone_db_1',
+#         'USER': 'postgres',
+#         'PASSWORD': 'Toom007a',
+#         'HOST': '100.93.82.18',
+#     }
+# }
+import dj_database_url
+
+DATABASES = {
+    'default':
+    dj_database_url.parse(env('DATABASE_URL'))
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -136,3 +189,19 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+from django.contrib.messages import constants as messages
+
+MESSAGE_TAGS = {
+    messages.ERROR: "danger",
+}
+
+SITE_ID = 1
+SOCIALACCOUNT_LOGIN_ON_GET = True
+
+# Email setting
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'ipathsaid@gmail.com'
+EMAIL_HOST_PASSWORD = 'tfwgidmpdosbdwgw'
+EMAIL_USE_TLS = True
